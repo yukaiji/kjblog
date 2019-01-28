@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 读取 MBG 配置生成代码
  *
- * @author jianweishi3@creditease.cn
+ * @author kaiji
  * @since 2018/05/02
  */
 public class Generator {
