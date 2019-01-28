@@ -1,0 +1,17 @@
+.article-detail-header{
+	color: #a94442;
+	font-weight: 700;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+
+.btn-detail-prev{
+	float: left;
+	width: 300px;
+}
+
+.btn-detail-next{
+	float: right;
+	width: 300px;
+}

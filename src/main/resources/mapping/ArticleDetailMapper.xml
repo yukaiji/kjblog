@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yukaiji.kjblog.dao.mapper.ArticleDetailMapper">
+  <resultMap id="BaseResultMap" type="com.yukaiji.kjblog.model.ArticleDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="article_import" jdbcType="VARCHAR" property="articleImport" />
+    <result column="article_prev_title" jdbcType="VARCHAR" property="articlePrevTitle" />
+    <result column="article_prev_id" jdbcType="INTEGER" property="articlePrevId" />
+    <result column="article_next_title" jdbcType="VARCHAR" property="articleNextTitle" />
+    <result column="article_next_id" jdbcType="INTEGER" property="articleNextId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yukaiji.kjblog.model.ArticleDetail">
+    <result column="article_detail" jdbcType="LONGVARCHAR" property="articleDetail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, article_id, article_import, article_prev_title, article_prev_id, article_next_title, 
+    article_next_id
+  </sql>
+  <sql id="Blob_Column_List">
+    article_detail
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from article_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into article_detail (id, article_id, article_import, 
+      article_prev_title, article_prev_id, article_next_title, 
+      article_next_id, article_detail)
+    values (#{id,jdbcType=INTEGER}, #{articleId,jdbcType=INTEGER}, #{articleImport,jdbcType=VARCHAR}, 
+      #{articlePrevTitle,jdbcType=VARCHAR}, #{articlePrevId,jdbcType=INTEGER}, #{articleNextTitle,jdbcType=VARCHAR}, 
+      #{articleNextId,jdbcType=INTEGER}, #{articleDetail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into article_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="articleId != null">
+        article_id,
+      </if>
+      <if test="articleImport != null">
+        article_import,
+      </if>
+      <if test="articlePrevTitle != null">
+        article_prev_title,
+      </if>
+      <if test="articlePrevId != null">
+        article_prev_id,
+      </if>
+      <if test="articleNextTitle != null">
+        article_next_title,
+      </if>
+      <if test="articleNextId != null">
+        article_next_id,
+      </if>
+      <if test="articleDetail != null">
+        article_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="articleImport != null">
+        #{articleImport,jdbcType=VARCHAR},
+      </if>
+      <if test="articlePrevTitle != null">
+        #{articlePrevTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articlePrevId != null">
+        #{articlePrevId,jdbcType=INTEGER},
+      </if>
+      <if test="articleNextTitle != null">
+        #{articleNextTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleNextId != null">
+        #{articleNextId,jdbcType=INTEGER},
+      </if>
+      <if test="articleDetail != null">
+        #{articleDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
+    update article_detail
+    <set>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="articleImport != null">
+        article_import = #{articleImport,jdbcType=VARCHAR},
+      </if>
+      <if test="articlePrevTitle != null">
+        article_prev_title = #{articlePrevTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articlePrevId != null">
+        article_prev_id = #{articlePrevId,jdbcType=INTEGER},
+      </if>
+      <if test="articleNextTitle != null">
+        article_next_title = #{articleNextTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleNextId != null">
+        article_next_id = #{articleNextId,jdbcType=INTEGER},
+      </if>
+      <if test="articleDetail != null">
+        article_detail = #{articleDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
+    update article_detail
+    set article_id = #{articleId,jdbcType=INTEGER},
+      article_import = #{articleImport,jdbcType=VARCHAR},
+      article_prev_title = #{articlePrevTitle,jdbcType=VARCHAR},
+      article_prev_id = #{articlePrevId,jdbcType=INTEGER},
+      article_next_title = #{articleNextTitle,jdbcType=VARCHAR},
+      article_next_id = #{articleNextId,jdbcType=INTEGER},
+      article_detail = #{articleDetail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
+    update article_detail
+    set article_id = #{articleId,jdbcType=INTEGER},
+      article_import = #{articleImport,jdbcType=VARCHAR},
+      article_prev_title = #{articlePrevTitle,jdbcType=VARCHAR},
+      article_prev_id = #{articlePrevId,jdbcType=INTEGER},
+      article_next_title = #{articleNextTitle,jdbcType=VARCHAR},
+      article_next_id = #{articleNextId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

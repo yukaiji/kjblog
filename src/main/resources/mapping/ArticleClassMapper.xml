@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yukaiji.kjblog.dao.mapper.ArticleClassMapper">
+  <resultMap id="BaseResultMap" type="com.yukaiji.kjblog.model.ArticleClass">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_class_name" jdbcType="VARCHAR" property="articleClassName" />
+    <result column="article_class_id" jdbcType="INTEGER" property="articleClassId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, article_class_name, article_class_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from article_class
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from article_class
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yukaiji.kjblog.model.ArticleClass">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into article_class (id, article_class_name, article_class_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{articleClassName,jdbcType=VARCHAR}, #{articleClassId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yukaiji.kjblog.model.ArticleClass">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into article_class
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="articleClassName != null">
+        article_class_name,
+      </if>
+      <if test="articleClassId != null">
+        article_class_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="articleClassName != null">
+        #{articleClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="articleClassId != null">
+        #{articleClassId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yukaiji.kjblog.model.ArticleClass">
+    update article_class
+    <set>
+      <if test="articleClassName != null">
+        article_class_name = #{articleClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="articleClassId != null">
+        article_class_id = #{articleClassId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yukaiji.kjblog.model.ArticleClass">
+    update article_class
+    set article_class_name = #{articleClassName,jdbcType=VARCHAR},
+      article_class_id = #{articleClassId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yukaiji.kjblog.dao.mapper.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.yukaiji.kjblog.model.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="article_class_id" jdbcType="INTEGER" property="articleClassId" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="article_sub_title" jdbcType="VARCHAR" property="articleSubTitle" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="article_digest" jdbcType="LONGVARCHAR" property="articleDigest" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yukaiji.kjblog.model.Article">
+    <result column="article_digest" jdbcType="LONGVARCHAR" property="articleDigest" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, article_class_id, article_title, article_sub_title, created_time
+  </sql>
+  <sql id="Blob_Column_List">
+    article_digest
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByParam" resultType="com.yukaiji.kjblog.model.requestmodel.ArticleRequest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from article
+    <where>
+      <if test="articleClassId != null">
+        article_class_id = #{articleClassId,jdbcType=INTEGER},
+      </if>
+      <if test="articleTitle != null">
+        and article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleSubTitle != null">
+        and article_sub_title = #{articleSubTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        and created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleDigest != null">
+        and article_digest = #{articleDigest,jdbcType=LONGVARCHAR},
+      </if>
+    </where>
+    order by created_time desc
+    limit #{startNum}, #{endNum}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(*) from article
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from article
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yukaiji.kjblog.model.Article">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into article (id, article_class_id, article_title, 
+      article_sub_title, created_time, article_digest
+      )
+    values (#{id,jdbcType=INTEGER}, #{articleClassId,jdbcType=INTEGER}, #{articleTitle,jdbcType=VARCHAR}, 
+      #{articleSubTitle,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{articleDigest,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yukaiji.kjblog.model.Article">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="articleClassId != null">
+        article_class_id,
+      </if>
+      <if test="articleTitle != null">
+        article_title,
+      </if>
+      <if test="articleSubTitle != null">
+        article_sub_title,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="articleDigest != null">
+        article_digest,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="articleClassId != null">
+        #{articleClassId,jdbcType=INTEGER},
+      </if>
+      <if test="articleTitle != null">
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleSubTitle != null">
+        #{articleSubTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleDigest != null">
+        #{articleDigest,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yukaiji.kjblog.model.Article">
+    update article
+    <set>
+      <if test="articleClassId != null">
+        article_class_id = #{articleClassId,jdbcType=INTEGER},
+      </if>
+      <if test="articleTitle != null">
+        article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="articleSubTitle != null">
+        article_sub_title = #{articleSubTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleDigest != null">
+        article_digest = #{articleDigest,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yukaiji.kjblog.model.Article">
+    update article
+    set article_class_id = #{articleClassId,jdbcType=INTEGER},
+      article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_sub_title = #{articleSubTitle,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      article_digest = #{articleDigest,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yukaiji.kjblog.model.Article">
+    update article
+    set article_class_id = #{articleClassId,jdbcType=INTEGER},
+      article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_sub_title = #{articleSubTitle,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
