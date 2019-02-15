@@ -6,12 +6,13 @@ import com.alibaba.fastjson.JSON;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 /**
  * @author kaijiyu
  */
 public class BaseController {
-
+    private static final Logger log = Logger.getLogger("BaseController");
     public static void printJson(HttpServletResponse response, Object object){
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
@@ -19,6 +20,7 @@ public class BaseController {
         try {
             out = response.getWriter();
             out.print(JSON.toJSONString(object));
+            log.info("PrintJson:" + JSON.toJSONString(object));
             out.flush();
             out.close();
         } catch (IOException e) {

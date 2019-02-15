@@ -2,8 +2,7 @@ package com.yukaiji.kjblog.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yukaiji.kjblog.model.responsemodel.BaseResponse;
-import org.apache.tomcat.util.bcel.classfile.Constant;
-import org.springframework.http.HttpRequest;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,30 +33,27 @@ public class WriteArticleController extends BaseController{
     @RequestMapping("/uploadfile")
     public void uploadfile(@RequestParam(value = "editormd-image-file", required = true) MultipartFile file,
                            HttpServletRequest request, HttpServletResponse response){
-        BaseResponse baseResponse = new BaseResponse();
         String trueFileName = file.getOriginalFilename();
-
         String suffix = trueFileName.substring(trueFileName.lastIndexOf("."));
-
         String fileName = System.currentTimeMillis()+suffix;
-
-        String path = request.getSession().getServletContext().getRealPath("/assets/msg/upload/");
-        System.out.println(path);
-
-        File targetFile = new File(path, fileName);
-        if(!targetFile.exists()){
-            targetFile.mkdirs();
-        }
-        //保存
+        String path = null;
+        Map<String, Object> uploadResp = new HashMap<>();
         try {
+            path = ResourceUtils.getURL("classpath:").getPath() + "static/img/upload/";
+            System.out.println(path);
+            File targetFile = new File(path, fileName);
+            if(!targetFile.getParentFile().exists()){
+                targetFile.getParentFile().mkdirs();
+            }
             file.transferTo(targetFile);
+            uploadResp.put("url", "/upload/" + fileName);
+            uploadResp.put("message","上传成功");
+            uploadResp.put("success",1);
         } catch (Exception e) {
             e.printStackTrace();
+            uploadResp.put("message","上传失败");
+            uploadResp.put("success",0);
         }
-        JSONObject res = new JSONObject();
-        res.put("url","");
-        res.put("success", 1);
-        res.put("message", "upload success!");
-        printJson(response, baseResponse);
+        printJson(response, uploadResp);
     }
 }
