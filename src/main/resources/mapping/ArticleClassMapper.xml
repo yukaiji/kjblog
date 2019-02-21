@@ -15,6 +15,22 @@
     from article_class
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByParam" resultType="com.yukaiji.kjblog.model.ArticleClass" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from article_class
+    <where>
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="articleClassName != null">
+        and article_class_name = #{articleClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="articleClassId != null">
+        and article_class_id = #{articleClassId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from article_class
     where id = #{id,jdbcType=INTEGER}

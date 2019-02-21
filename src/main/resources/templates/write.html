@@ -14,16 +14,28 @@
 
 <body >
 	<div class="article input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
-		<span class="input-group-addon" id="sizing-addon2">标题</span>
+		<span class="input-group-addon">文章标题</span>
 		<input id="article-title" class="form-control" type="text" name="article-title" placeholder="Title" />
 	</div>
-	<div></div>
-	<div class="editormd" id="test-editormd">
+
+	<div class="input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
+		<span class="input-group-addon">文章分类</span>
+		<select id="article-class" class="form-control" name="article-class">
+			<option th:each="articleClass:${articleClassList}" th:text="${articleClass.getArticleClassName()}" th:value="${articleClass.getArticleClassId()}"></option>
+		</select>
+	</div>
+
+	<div class="editormd" id="test-editormd" style="margin-top: 20px;">
 		<textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc"></textarea>
 		<!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
 		<textarea id="article-html" class="editormd-html-textarea" name="article"></textarea>
 	</div>
-	<button id="submit"> 提交</button>
+	<div class="page-btn" style="margin: 0 auto;width: 90%;text-align: center;margin-top: 50px;">
+		<a id="submit" class="btn btn-default">提交</a>
+		<a id="cancel" class="btn btn-default" href="index.html" style="margin-left: 50px;">取消</a>
+	</div>
+
+	<div style="margin-top: 50px;height: 10px;"></div>
 </body>
 <script th:inline="javascript">
     $(function() {
@@ -45,11 +57,14 @@
         //获取第二个textarea的值，即生成的HTML代码   实际开发中此值存入后台数据库
         var article =$("#article-html").val();
         var articleTitle = $("#article-title").val();
-        console.log(article)
+        var articleClass = $("#article-class").val();
+        console.log(article);
+        console.log(articleTitle);
+        console.log(articleClass);
         $.ajax({
             type: "post",
             url: "write",
-            data: {article:article,articleTitle:articleTitle},
+            data: {article:article,articleTitle:articleTitle,articleClass:articleClass},
             dataType: "json",
             success: function(data){
                 console.log(data);
@@ -58,7 +73,6 @@
                 console.log(error);
             }
         });
-
     });
 </script>
 </html>

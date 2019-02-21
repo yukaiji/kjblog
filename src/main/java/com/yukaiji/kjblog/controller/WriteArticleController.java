@@ -25,6 +25,7 @@ public class WriteArticleController extends BaseController{
         BaseResponse baseResponse = new BaseResponse();
         String article = request.getParameter("article");
         String articleTitle = request.getParameter("articleTitle");
+        String articleClass = request.getParameter("articleClass");
 
 
         printJson(response, baseResponse);
