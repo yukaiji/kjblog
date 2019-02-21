@@ -1,7 +1,10 @@
 package com.yukaiji.kjblog.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.yukaiji.kjblog.dao.mapper.ArticleMapper;
+import com.yukaiji.kjblog.model.Article;
 import com.yukaiji.kjblog.model.responsemodel.BaseResponse;
+import com.yukaiji.kjblog.service.ArticleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,14 +23,18 @@ import java.util.Map;
 @RestController
 public class WriteArticleController extends BaseController{
 
+    @Autowired
+    private ArticleService articleService;
+
     @RequestMapping("/write")
     public void writeArticle(HttpServletRequest request, HttpServletResponse response){
         BaseResponse baseResponse = new BaseResponse();
-        String article = request.getParameter("article");
+        String articleDetail = request.getParameter("article");
         String articleTitle = request.getParameter("articleTitle");
         String articleClass = request.getParameter("articleClass");
-
-
+        String articleSubtitle = request.getParameter("articleSubtitle");
+        String articleDigest = request.getParameter("articleDigest");
+        articleService.addArticle(articleTitle, articleClass, articleSubtitle, articleDigest, articleDetail);
         printJson(response, baseResponse);
     }
 

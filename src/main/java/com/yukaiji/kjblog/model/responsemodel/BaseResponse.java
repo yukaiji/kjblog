@@ -35,4 +35,10 @@ public class BaseResponse {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public void setErrorMessage(String message, String code){
+        this.message = message;
+        this.code = code;
+        this.success = "0";
+    }
 }

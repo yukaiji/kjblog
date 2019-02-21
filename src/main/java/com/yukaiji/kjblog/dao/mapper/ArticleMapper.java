@@ -22,6 +22,10 @@ public interface ArticleMapper {
 
     List<Article> selectByParam(ArticleRequest articleParam);
 
+    Article selectNextArticle(Integer id);
+
+    Article selectPrevArticle(Integer id);
+
     int selectCount();
 
     int updateByPrimaryKeySelective(Article record);

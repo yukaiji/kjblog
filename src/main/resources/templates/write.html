@@ -18,6 +18,16 @@
 		<input id="article-title" class="form-control" type="text" name="article-title" placeholder="Title" />
 	</div>
 
+	<div class="article input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
+		<span class="input-group-addon">文章副标题</span>
+		<input id="article-subtitle" class="form-control" type="text" name="article-subtitle" placeholder="subtitle" />
+	</div>
+
+	<div class="article input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
+		<span class="input-group-addon">文章摘要</span>
+		<input id="article-digest" class="form-control" type="text" name="article-digest" placeholder="digest" />
+	</div>
+
 	<div class="input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
 		<span class="input-group-addon">文章分类</span>
 		<select id="article-class" class="form-control" name="article-class">
@@ -57,6 +67,8 @@
         //获取第二个textarea的值，即生成的HTML代码   实际开发中此值存入后台数据库
         var article =$("#article-html").val();
         var articleTitle = $("#article-title").val();
+        var articleSubtitle = $("#article-subtitle").val();
+        var articleDigest = $("#article-digest").val();
         var articleClass = $("#article-class").val();
         console.log(article);
         console.log(articleTitle);
@@ -64,7 +76,7 @@
         $.ajax({
             type: "post",
             url: "write",
-            data: {article:article,articleTitle:articleTitle,articleClass:articleClass},
+            data: {article:article,articleTitle:articleTitle,articleClass:articleClass,articleSubtitle:articleSubtitle,articleDigest:articleDigest},
             dataType: "json",
             success: function(data){
                 console.log(data);

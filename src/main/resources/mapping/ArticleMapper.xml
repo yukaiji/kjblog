@@ -53,19 +53,25 @@
   <select id="selectCount" resultType="java.lang.Integer">
     select count(*) from article
   </select>
+
+  <select id="selectNextArticle" resultType="com.yukaiji.kjblog.model.Article" resultMap="BaseResultMap">
+    select * from article where id = (select id from article where id &gt; #{id} order by id asc limit 1);
+  </select>
+
+  <select id="selectPrevArticle" resultType="com.yukaiji.kjblog.model.Article" resultMap="BaseResultMap">
+    select * from article where id = (select id from article where id &lt; #{id} order by id desc limit 1);
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from article
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.yukaiji.kjblog.model.Article">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into article (id, article_class_id, article_title, 
+  <insert id="insert" parameterType="com.yukaiji.kjblog.model.Article" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into article (article_class_id, article_title,
       article_sub_title, created_time, article_digest
       )
-    values (#{id,jdbcType=INTEGER}, #{articleClassId,jdbcType=INTEGER}, #{articleTitle,jdbcType=VARCHAR}, 
-      #{articleSubTitle,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{articleDigest,jdbcType=LONGVARCHAR}
+    values (#{articleClassId,jdbcType=INTEGER}, #{articleTitle,jdbcType=VARCHAR},
+      #{articleSubTitle,jdbcType=VARCHAR}, now(), #{articleDigest,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.yukaiji.kjblog.model.Article">
@@ -84,12 +90,10 @@
       <if test="articleSubTitle != null">
         article_sub_title,
       </if>
-      <if test="createdTime != null">
-        created_time,
-      </if>
       <if test="articleDigest != null">
         article_digest,
       </if>
+      created_time
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       #{id,jdbcType=INTEGER},
@@ -102,12 +106,10 @@
       <if test="articleSubTitle != null">
         #{articleSubTitle,jdbcType=VARCHAR},
       </if>
-      <if test="createdTime != null">
-        #{createdTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="articleDigest != null">
         #{articleDigest,jdbcType=LONGVARCHAR},
       </if>
+      now()
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.yukaiji.kjblog.model.Article">

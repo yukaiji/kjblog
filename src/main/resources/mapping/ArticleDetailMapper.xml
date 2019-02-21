@@ -36,10 +36,10 @@
     <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into article_detail (id, article_id, article_import, 
+    insert into article_detail (article_id, article_import,
       article_prev_title, article_prev_id, article_next_title, 
       article_next_id, article_detail)
-    values (#{id,jdbcType=INTEGER}, #{articleId,jdbcType=INTEGER}, #{articleImport,jdbcType=VARCHAR}, 
+    values (#{articleId,jdbcType=INTEGER}, #{articleImport,jdbcType=VARCHAR},
       #{articlePrevTitle,jdbcType=VARCHAR}, #{articlePrevId,jdbcType=INTEGER}, #{articleNextTitle,jdbcType=VARCHAR}, 
       #{articleNextId,jdbcType=INTEGER}, #{articleDetail,jdbcType=LONGVARCHAR})
   </insert>
@@ -100,9 +100,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
     update article_detail
     <set>
-      <if test="articleId != null">
-        article_id = #{articleId,jdbcType=INTEGER},
-      </if>
       <if test="articleImport != null">
         article_import = #{articleImport,jdbcType=VARCHAR},
       </if>
@@ -122,7 +119,7 @@
         article_detail = #{articleDetail,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
     update article_detail
@@ -137,12 +134,12 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
     update article_detail
-    set article_id = #{articleId,jdbcType=INTEGER},
+    set
       article_import = #{articleImport,jdbcType=VARCHAR},
       article_prev_title = #{articlePrevTitle,jdbcType=VARCHAR},
       article_prev_id = #{articlePrevId,jdbcType=INTEGER},
       article_next_title = #{articleNextTitle,jdbcType=VARCHAR},
       article_next_id = #{articleNextId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>
