@@ -31,7 +31,7 @@
 	<div class="input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
 		<span class="input-group-addon">文章分类</span>
 		<select id="article-class" class="form-control" name="article-class">
-			<option th:each="articleClass:${articleClassList}" th:text="${articleClass.getArticleClassName()}" th:value="${articleClass.getArticleClassId()}"></option>
+			<option th:each="articleClass:${articleClassList}" th:text="${articleClass.getArticleClassName()}" th:value="${articleClass.getId()}"></option>
 		</select>
 	</div>
 

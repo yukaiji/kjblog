@@ -34,18 +34,21 @@ public class ArticleServiceImpl implements ArticleService {
                 return baseResponse;
             }
             Article prev = articleMapper.selectPrevArticle(article.getId());
+
             ArticleDetail articleDetail = new ArticleDetail();
             articleDetail.setArticleId(article.getId());
             articleDetail.setArticleDetail(articleDetailBody);
-            articleDetail.setArticlePrevId(prev.getId());
-            articleDetail.setArticlePrevTitle(prev.getArticleSubTitle());
-            articleDetailMapper.insert(articleDetail);
+            if (prev != null) {
+                articleDetail.setArticlePrevId(prev.getId());
+                articleDetail.setArticlePrevTitle(prev.getArticleSubTitle());
 
-            ArticleDetail articlePrevDetail = new ArticleDetail();
-            articlePrevDetail.setArticleId(prev.getId());
-            articlePrevDetail.setArticleNextId(article.getId());
-            articlePrevDetail.setArticleNextTitle(article.getArticleSubTitle());
-            articleDetailMapper.updateByPrimaryKeySelective(articlePrevDetail);
+                ArticleDetail articlePrevDetail = new ArticleDetail();
+                articlePrevDetail.setArticleId(prev.getId());
+                articlePrevDetail.setArticleNextId(article.getId());
+                articlePrevDetail.setArticleNextTitle(article.getArticleSubTitle());
+                articleDetailMapper.updateByPrimaryKeySelective(articlePrevDetail);
+            }
+            articleDetailMapper.insert(articleDetail);
 
         } catch (Exception e) {
             baseResponse.setErrorMessage("系统异常", "9999");
