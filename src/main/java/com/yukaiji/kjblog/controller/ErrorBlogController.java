@@ -18,16 +18,16 @@ public class ErrorBlogController implements ErrorController {
         //获取statusCode:401,404,500
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         if(statusCode == 404){
-            return "/404";
+            return "404";
         }else if(statusCode == 500){
-            return "/500";
+            return "500";
         }else{
-            return "/error";
+            return "error";
         }
     }
 
     @Override
     public String getErrorPath() {
-        return "/error";
+        return "error";
     }
 }
