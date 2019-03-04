@@ -74,4 +74,23 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <filter-resource-name>dev</filter-resource-name>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+                <filter-resource-name>prod</filter-resource-name>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
