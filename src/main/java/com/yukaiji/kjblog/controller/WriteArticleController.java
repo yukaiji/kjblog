@@ -27,16 +27,32 @@ public class WriteArticleController extends BaseController{
     private ArticleService articleService;
 
     @RequestMapping("/write")
-    public void writeArticle(HttpServletRequest request, HttpServletResponse response){
+    public void write(HttpServletRequest request, HttpServletResponse response){
         BaseResponse baseResponse = new BaseResponse();
         String articleDetail = request.getParameter("article");
         String articleTitle = request.getParameter("articleTitle");
         String articleClass = request.getParameter("articleClass");
         String articleSubtitle = request.getParameter("articleSubtitle");
         String articleDigest = request.getParameter("articleDigest");
-        articleService.addArticle(articleTitle, articleClass, articleSubtitle, articleDigest, articleDetail);
+        String articleMd = request.getParameter("articleMd");
+        articleService.addArticle(articleTitle, articleClass, articleSubtitle, articleDigest, articleDetail, articleMd);
         printJson(response, baseResponse);
     }
+
+    @RequestMapping("/update")
+    public void update(HttpServletRequest request, HttpServletResponse response){
+        BaseResponse baseResponse = new BaseResponse();
+        String articleDetail = request.getParameter("article");
+        String articleTitle = request.getParameter("articleTitle");
+        String articleClass = request.getParameter("articleClass");
+        String articleSubtitle = request.getParameter("articleSubtitle");
+        String articleDigest = request.getParameter("articleDigest");
+        String articleMd = request.getParameter("articleMd");
+        String articleId = request.getParameter("articleId");
+        articleService.updateArticle(articleTitle, articleClass, articleSubtitle, articleDigest, articleDetail, articleMd, Integer.valueOf(articleId));
+        printJson(response, baseResponse);
+    }
+
 
     @RequestMapping("/uploadfile")
     public void uploadfile(@RequestParam(value = "editormd-image-file", required = true) MultipartFile file,

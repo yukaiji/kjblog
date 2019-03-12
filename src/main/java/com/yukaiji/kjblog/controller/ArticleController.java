@@ -64,7 +64,7 @@ public class ArticleController {
         if (StringUtils.isEmpty(articleId)) {
             return "error";
         }
-        ArticleDetail articleDetail = articleDetailMapper.selectByPrimaryKey(Integer.valueOf(articleId));
+        ArticleDetail articleDetail = articleDetailMapper.selectByArticleId(Integer.valueOf(articleId));
         Article article = articleMapper.selectByPrimaryKey(articleDetail.getArticleId());
         model.addAttribute("articleDetail", articleDetail);
         model.addAttribute("article", article);

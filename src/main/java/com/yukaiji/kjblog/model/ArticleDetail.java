@@ -23,6 +23,8 @@ public class ArticleDetail implements Serializable {
 
     private String articleDetail;
 
+    private String articleMd;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -87,5 +89,13 @@ public class ArticleDetail implements Serializable {
 
     public void setArticleDetail(String articleDetail) {
         this.articleDetail = articleDetail == null ? null : articleDetail.trim();
+    }
+
+    public String getArticleMd() {
+        return articleMd;
+    }
+
+    public void setArticleMd(String articleMd) {
+        this.articleMd = articleMd;
     }
 }

@@ -9,13 +9,14 @@
     <result column="article_prev_id" jdbcType="INTEGER" property="articlePrevId" />
     <result column="article_next_title" jdbcType="VARCHAR" property="articleNextTitle" />
     <result column="article_next_id" jdbcType="INTEGER" property="articleNextId" />
+    <result column="article_md" jdbcType="LONGVARCHAR" property="articleMd" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yukaiji.kjblog.model.ArticleDetail">
     <result column="article_detail" jdbcType="LONGVARCHAR" property="articleDetail" />
   </resultMap>
   <sql id="Base_Column_List">
     id, article_id, article_import, article_prev_title, article_prev_id, article_next_title, 
-    article_next_id
+    article_next_id, article_md
   </sql>
   <sql id="Blob_Column_List">
     article_detail
@@ -28,7 +29,15 @@
     from article_detail
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByArticleId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+      select
+      <include refid="Base_Column_List" />
+      ,
+      <include refid="Blob_Column_List" />
+      from article_detail
+      where article_id = #{articleId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from article_detail
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -38,10 +47,10 @@
     </selectKey>
     insert into article_detail (article_id, article_import,
       article_prev_title, article_prev_id, article_next_title, 
-      article_next_id, article_detail)
+      article_next_id, article_detail, article_md)
     values (#{articleId,jdbcType=INTEGER}, #{articleImport,jdbcType=VARCHAR},
       #{articlePrevTitle,jdbcType=VARCHAR}, #{articlePrevId,jdbcType=INTEGER}, #{articleNextTitle,jdbcType=VARCHAR}, 
-      #{articleNextId,jdbcType=INTEGER}, #{articleDetail,jdbcType=LONGVARCHAR})
+      #{articleNextId,jdbcType=INTEGER}, #{articleDetail,jdbcType=LONGVARCHAR}, #{articleMd,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
     <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
@@ -71,6 +80,9 @@
       <if test="articleDetail != null">
         article_detail,
       </if>
+      <if test="articleMd != null">
+        article_md,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       #{id,jdbcType=INTEGER},
@@ -95,6 +107,9 @@
       <if test="articleDetail != null">
         #{articleDetail,jdbcType=LONGVARCHAR},
       </if>
+      <if test="articleMd != null">
+        #{articleMd,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.yukaiji.kjblog.model.ArticleDetail">
@@ -118,6 +133,9 @@
       <if test="articleDetail != null">
         article_detail = #{articleDetail,jdbcType=LONGVARCHAR},
       </if>
+      <if test="articleMd != null">
+        article_md = #{articleMd,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
@@ -130,6 +148,7 @@
       article_next_title = #{articleNextTitle,jdbcType=VARCHAR},
       article_next_id = #{articleNextId,jdbcType=INTEGER},
       article_detail = #{articleDetail,jdbcType=LONGVARCHAR}
+      article_md = #{articleMd,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yukaiji.kjblog.model.ArticleDetail">

@@ -10,35 +10,37 @@
 
 <script th:src="@{/static/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/static/editor/editormd.min.js}"></script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <body >
 	<div class="article input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
 		<span class="input-group-addon">文章标题</span>
-		<input id="article-title" class="form-control" type="text" name="article-title" placeholder="Title" />
+		<input id="article-title" th:value="${articleTitle}" class="form-control" type="text" name="article-title" placeholder="Title" />
 	</div>
 
 	<div class="article input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
 		<span class="input-group-addon">文章副标题</span>
-		<input id="article-subtitle" class="form-control" type="text" name="article-subtitle" placeholder="subtitle" />
+		<input id="article-subtitle" th:value="${articleSubtitle}" class="form-control" type="text" name="article-subtitle" placeholder="subtitle" />
 	</div>
 
 	<div class="article input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
 		<span class="input-group-addon">文章摘要</span>
-		<input id="article-digest" class="form-control" type="text" name="article-digest" placeholder="digest" />
+		<input id="article-digest" th:value="${articleDigest}" class="form-control" type="text" name="article-digest" placeholder="digest" />
 	</div>
 
 	<div class="input-group" style="margin: 0 auto;width: 90%;margin-top: 20px;">
 		<span class="input-group-addon">文章分类</span>
 		<select id="article-class" class="form-control" name="article-class">
-			<option th:each="articleClass:${articleClassList}" th:text="${articleClass.getArticleClassName()}" th:value="${articleClass.getId()}"></option>
+			<option th:each="articleClass:${articleClassList}" th:selected="articleClass == ${articleClass}" th:text="${articleClass.getArticleClassName()}" th:value="${articleClass.getId()}"></option>
 		</select>
 	</div>
 
 	<div class="editormd" id="test-editormd" style="margin-top: 20px;">
-		<textarea id="article-md" class="editormd-markdown-textarea" name="test-editormd-markdown-doc"></textarea>
+		<textarea style="display: none;" class="editormd-markdown-textarea" th:utext="${articleMd}" id="article-md" name="test-editormd-markdown-doc"></textarea>
 		<!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
-		<textarea id="article-html" class="editormd-html-textarea" name="article"></textarea>
+		<textarea id="article-html" class="editormd-html-textarea"  th:utext="${article}" th:text="${article}" name="article"></textarea>
 	</div>
 	<div class="page-btn" style="margin: 0 auto;width: 90%;text-align: center;margin-top: 50px;">
 		<a id="submit" class="btn btn-default">提交</a>
@@ -58,7 +60,14 @@
             saveHTMLToTextarea:true,
             imageUpload : true,
             imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-            imageUploadURL : "/uploadfile"
+            imageUploadURL : "/uploadfile",
+            htmlDecode      : "style,script,iframe",  // you can filter tags decode
+            emoji           : true,
+            taskList        : true,
+            tex             : true,  // 默认不解析
+            flowChart       : true,  // 默认不解析
+            sequenceDiagram : true,  // 默认不解析
+            codeFold : true
         });
     });
 
@@ -71,19 +80,20 @@
         var articleDigest = $("#article-digest").val();
         var articleClass = $("#article-class").val();
         var articleMd = $("#article-md").val();
+        var articleId = [[${id}]];
         $.ajax({
             type: "post",
-            url: "write",
-            data: {article:article,articleTitle:articleTitle,articleClass:articleClass,articleSubtitle:articleSubtitle,articleDigest:articleDigest,articleMd:articleMd},
+            url: "update",
+            data: {article:article,articleTitle:articleTitle,articleClass:articleClass,articleSubtitle:articleSubtitle,articleDigest:articleDigest,articleMd:articleMd,articleId:articleId},
             dataType: "json",
             success: function(data){
                 console.log(data);
-                alert("插入成功");
+                alert("修改成功");
                 window.location.href="index";
             },
 			error: function (error) {
                 console.log(error);
-                alert("插入失败");
+                alert("修改失败");
             }
         });
     });

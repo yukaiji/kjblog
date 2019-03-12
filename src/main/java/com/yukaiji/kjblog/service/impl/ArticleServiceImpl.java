@@ -20,7 +20,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public BaseResponse addArticle(String articleTitle, String articleClass, String articleSubtitle, String articleDigest, String articleDetailBody) {
+    public BaseResponse addArticle(String articleTitle, String articleClass, String articleSubtitle, String articleDigest, String articleDetailBody, String articleMd) {
         BaseResponse baseResponse = new BaseResponse();
         try {
             Article article = new Article();
@@ -38,6 +38,7 @@ public class ArticleServiceImpl implements ArticleService {
             ArticleDetail articleDetail = new ArticleDetail();
             articleDetail.setArticleId(article.getId());
             articleDetail.setArticleDetail(articleDetailBody);
+            articleDetail.setArticleMd(articleMd);
             if (prev != null) {
                 articleDetail.setArticlePrevId(prev.getId());
                 articleDetail.setArticlePrevTitle(prev.getArticleSubTitle());
@@ -50,6 +51,31 @@ public class ArticleServiceImpl implements ArticleService {
             }
             articleDetailMapper.insert(articleDetail);
 
+        } catch (Exception e) {
+            baseResponse.setErrorMessage("系统异常", "9999");
+        }
+        return baseResponse;
+    }
+
+    @Override
+    @Transactional
+    public BaseResponse updateArticle(String articleTitle, String articleClass, String articleSubtitle, String articleDigest,
+                                      String articleDetail, String articleMd, Integer articleId) {
+        BaseResponse baseResponse = new BaseResponse();
+        try {
+//            Article article = new Article();
+//            article.setArticleDigest(articleDigest);
+//            article.setArticleClassId(Integer.valueOf(articleClass));
+//            article.setArticleSubTitle(articleSubtitle);
+//            article.setArticleTitle(articleTitle);
+//            article.setId(articleId);
+//            articleMapper.updateByPrimaryKeySelective(article);
+
+            ArticleDetail articlePrevDetail = new ArticleDetail();
+            articlePrevDetail.setArticleId(articleId);
+            articlePrevDetail.setArticleMd(articleMd);
+            articlePrevDetail.setArticleDetail(articleDetail);
+            articleDetailMapper.updateByPrimaryKeySelective(articlePrevDetail);
         } catch (Exception e) {
             baseResponse.setErrorMessage("系统异常", "9999");
         }

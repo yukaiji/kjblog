@@ -17,6 +17,8 @@ public interface ArticleDetailMapper {
 
     ArticleDetail selectByPrimaryKey(Integer id);
 
+    ArticleDetail selectByArticleId(Integer id);
+
     int updateByPrimaryKeySelective(ArticleDetail record);
 
     int updateByPrimaryKeyWithBLOBs(ArticleDetail record);
