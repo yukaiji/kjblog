@@ -63,7 +63,7 @@ public class WriteArticleController extends BaseController{
         String path = null;
         Map<String, Object> uploadResp = new HashMap<>();
         try {
-            path = ResourceUtils.getURL("classpath:").getPath() + "static/img/upload/";
+            path = "/upload/kjblog/";
             System.out.println(path);
             File targetFile = new File(path, fileName);
             if(!targetFile.getParentFile().exists()){
