@@ -81,7 +81,7 @@
 					</div>
 					<div class="page-btn">
 						<a th:class="${articleResp.prevPageNum==0}? 'btn btn-default btn-prev hide' : 'btn btn-default btn-prev'" th:href="@{'index?pageSize='+${articleResp.prevPageNum}}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> PREV</a>
-						<a th:class="${articleResp.nextPageNum== articleResp.pageSize}? 'btn btn-default btn-next hide' : 'btn btn-default btn-next'" th:href="@{'index?pageSize='+${articleResp.nextPageNum}}">NEXT <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+						<a th:class="${articleResp.nextPageNum==0}? 'btn btn-default btn-next hide' : 'btn btn-default btn-next'" th:href="@{'index?pageSize='+${articleResp.nextPageNum}}">NEXT <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
 					</div>
 				</div>
 			</div>

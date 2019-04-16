@@ -53,6 +53,9 @@ public class ArticleController {
         articleResponse.setTotalCount(count);
         articleResponse.setPageSize(size);
         articleResponse.setNextPageNum(size > pageSize + 1? pageSize + 1: size);
+        if (size == pageSize){
+            articleResponse.setNextPageNum(0);
+        }
         articleResponse.setPrevPageNum(pageSize >= 1 ? pageSize - 1 : pageSize);
         model.addAttribute("articleResp", articleResponse);
         return "index";
