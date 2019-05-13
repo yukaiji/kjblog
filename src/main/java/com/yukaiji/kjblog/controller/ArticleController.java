@@ -35,7 +35,7 @@ public class ArticleController {
         }
         articleParam.setPageSize(pageSize);
         articleParam.setStartNum((pageSize-1) * 10);
-        articleParam.setEndNum(pageSize * 10);
+        articleParam.setEndNum(10);
         List<Article> articleList = articleMapper.selectByParam(articleParam);
         int count = articleMapper.selectCount();
 
