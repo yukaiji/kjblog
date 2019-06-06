@@ -2,7 +2,6 @@ package com.yukaiji.kjblog.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 文章基本信息类
@@ -56,7 +55,7 @@ public class Article implements Serializable {
         this.articleSubTitle = articleSubTitle == null ? null : articleSubTitle.trim();
     }
 
-    public Date getCreatedTime() {
+    public Timestamp getCreatedTime() {
         return createdTime;
     }
 
