@@ -24,4 +24,6 @@ public interface ArticleDetailMapper {
     int updateByPrimaryKeyWithBLOBs(ArticleDetail record);
 
     int updateByPrimaryKey(ArticleDetail record);
+
+    int updateReadNumber(Integer articleId);
 }
