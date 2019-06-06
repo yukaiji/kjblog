@@ -1,6 +1,7 @@
 package com.yukaiji.kjblog.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ public class Article implements Serializable {
     /** 文章副标题 **/
     private String articleSubTitle;
     /** 创建时间 **/
-    private Date createdTime;
+    private Timestamp createdTime;
     /** 文章摘要 **/
     private String articleDigest;
 
@@ -59,7 +60,7 @@ public class Article implements Serializable {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(Timestamp createdTime) {
         this.createdTime = createdTime;
     }
 
