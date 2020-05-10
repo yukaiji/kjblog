@@ -60,6 +60,11 @@
 		<!-- 正文部分 -->
 		<div class="container">
 			<div class="row">
+				<form class="" style="margin: 0 auto;width: 50%;margin-top: 40px;">
+					<div class="">
+						<input type="text" class="form-control" id="search" placeholder="搜索">
+					</div>
+				</form>
 				<div class="line"></div>
 				<div class="col-md-8">
 					<div class="article-body" th:each="article:${articleResp.getArticleList()}">
@@ -82,6 +87,15 @@
 					<div class="page-btn">
 						<a th:class="${articleResp.prevPageNum==0}? 'btn btn-default btn-prev hide' : 'btn btn-default btn-prev'" th:href="@{'index?pageSize='+${articleResp.prevPageNum}}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> PREV</a>
 						<a th:class="${articleResp.nextPageNum==0}? 'btn btn-default btn-next hide' : 'btn btn-default btn-next'" th:href="@{'index?pageSize='+${articleResp.nextPageNum}}">NEXT <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+					</div>
+				</div>
+				<div class="col-md-4" >
+					<div class="article-body"><h3>文章分类</h3></div>
+					<div style="padding-top: 20px;">
+						<ul>
+							<li><a>JAVA基础</a></li>
+							<li><a>算法探索</a></li>
+						</ul>
 					</div>
 				</div>
 			</div>
