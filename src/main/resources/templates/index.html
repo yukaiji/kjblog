@@ -60,6 +60,11 @@
 		<!-- 正文部分 -->
 		<div class="container">
 			<div class="row">
+				<form class="" style="margin: 0 auto;width: 50%;margin-top: 40px;">
+					<div class="">
+						<input type="text" class="form-control" id="search" placeholder="搜索">
+					</div>
+				</form>
 				<div class="line"></div>
 				<div class="col-md-8">
 					<div class="article-body" th:each="article:${articleResp.getArticleList()}">
@@ -84,6 +89,15 @@
 						<a th:class="${articleResp.nextPageNum==0}? 'btn btn-default btn-next hide' : 'btn btn-default btn-next'" th:href="@{'index?pageSize='+${articleResp.nextPageNum}}">NEXT <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
 					</div>
 				</div>
+				<div class="col-md-4" >
+					<div class="article-body"><h3>文章分类</h3></div>
+					<div style="padding-top: 20px;">
+						<ul>
+							<li><a>JAVA基础</a></li>
+							<li><a>算法探索</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -94,7 +108,7 @@
 					<div class="div-height-100"></div>
 					<div class="div-height-20"></div>
 					<div class="footer-customer">
-						<p>Copyright © 2018- 2019 YuKaiji All Rights Reserved</p>
+						<p>Copyright © 2018- 2019 YuKaiji All Rights Reserved 备案号:<a href="http://www.beian.miit.gov.cn">京ICP备19011632号-1</a></p>
 					</div>
 					<div class="div-height-100"></div>
 				</div>
