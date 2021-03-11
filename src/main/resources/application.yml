@@ -13,4 +13,3 @@ mybatis:
   type-aliases-package: com.yukaiji.kjblog.dao.apper
   configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-

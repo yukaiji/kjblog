@@ -16,3 +16,8 @@ spring:
       cache: false
 server:
   port: 8080
+
+cache:
+  local-cache:
+    maxPair: 10000
+    maxMemory: 100

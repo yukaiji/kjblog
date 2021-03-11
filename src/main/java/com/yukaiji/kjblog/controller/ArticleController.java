@@ -7,6 +7,7 @@ import com.yukaiji.kjblog.model.ArticleDetail;
 import com.yukaiji.kjblog.model.requestmodel.ArticleRequest;
 import com.yukaiji.kjblog.model.responsemodel.ArticleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -28,6 +29,7 @@ public class ArticleController {
 
 
     @RequestMapping("/index")
+    @Cacheable
     public String index(ModelMap model, Integer pageSize){
         ArticleRequest articleParam = new ArticleRequest();
         if (null == pageSize || pageSize == 0) {
