@@ -80,14 +80,6 @@ public class RedisUtil {
     }
 
     /**
-     * 删除集合对象
-     * @param collection
-     */
-    public void deleteObject(Collection collection) {
-        redisTemplate.delete(collection);
-    }
-
-    /**
      * 缓存List数据
      *
      * @param key      缓存的键值

@@ -1,4 +1,5 @@
 package com.yukaiji.kjblog.config;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -170,9 +171,10 @@ public class LocalCache {
 
     /**
      * 获取已经使用的内存情况
+     *
      * @return 占用内存单位KB
      */
-    public long getUseMemory(){
+    public long getUseMemory() {
         long memory = (RamUsageEstimator.sizeOfObject(cacheMap) - 64) / 1024;
         System.out.println(contextName + ":当前本地缓存大小存储数量为" + cacheMap.size() + "占用内存：" + memory + "KB");
         return memory;
@@ -203,6 +205,9 @@ public class LocalCache {
             last.next = cacheModel;
             last = cacheModel;
             linkedSize.incrementAndGet();
+            getUseMemory();
+        } catch (Exception e) {
+            throw e;
         } finally {
             lock.unlock();
         }
@@ -216,7 +221,8 @@ public class LocalCache {
         if (null == localCacheModel) {
             return null;
         }
-        if (System.currentTimeMillis() > localCacheModel.getTimeout()) {
+        long expireTime = localCacheModel.getTimeout();
+        if (expireTime > 0 && System.currentTimeMillis() > localCacheModel.getTimeout()) {
             removeNode(localCacheModel);
             return null;
         }

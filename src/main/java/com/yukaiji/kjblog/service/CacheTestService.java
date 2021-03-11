@@ -2,11 +2,13 @@ package com.yukaiji.kjblog.service;
 
 import com.yukaiji.kjblog.config.LocalCache;
 import com.yukaiji.kjblog.config.ObmsCache;
+import com.yukaiji.kjblog.config.ObmsPutCache;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description:
@@ -25,17 +27,18 @@ public class CacheTestService {
         return key;
     }
 
-    public String localCacheTest(String key) throws InterruptedException {
-        Object obj = localClient.get(key);
-        if (obj != null) {
-            System.out.println("缓存生效了" + key);
-            return obj.toString();
-        }
-        Random random = new Random();
-        Thread.sleep(2000);
-        localClient.put(key, key , 5000 + random.nextInt(50000));
+    @ObmsCache(keyName = "#key", useLocalCache = true, expireTime = 3000)
+    public String obmsCacheLocalTest(String key) throws InterruptedException {
+        Thread.sleep(3000);
         return key;
     }
+
+    @ObmsPutCache(keyName = "#key", useLocalCache = true, expireTime = 6000)
+    public String obmsCacheLocalPutTest(String key) throws InterruptedException {
+        Thread.sleep(3000);
+        return key;
+    }
+
 
     @Cacheable(key = "#key", cacheManager = "caffeineCacheManager", cacheNames = "oneName")
     public String caffeineCacheTest(String key) throws InterruptedException {
@@ -47,6 +50,17 @@ public class CacheTestService {
     public String caffeineCacheTest2(String key) throws InterruptedException {
         Thread.sleep(2000);
         return key;
+    }
+
+
+    @ObmsCache(keyName = "#key", useRedis = true, expireTime = 30000)
+    public List<String> obmsCacheRedisTest(String key) throws InterruptedException {
+        List<String> x = new ArrayList<>();
+        x.add("1");
+        x.add("2");
+        x.add("3");
+        Thread.sleep(2000);
+        return x;
     }
 
 }

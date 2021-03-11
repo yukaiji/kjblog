@@ -114,10 +114,9 @@ public class ObmsCacheAspect {
             }
             if (obmsCache.useLocalCache()) {
                 localCacheClient.put(cacheKeyName, object, expireTime);
-
             }
             if (obmsCache.useRedis()) {
-                redisUtil.setCacheObject(cacheKeyName, object, expireTime, TimeUnit.SECONDS);
+                redisUtil.setCacheObject(cacheKeyName, object, expireTime, TimeUnit.MILLISECONDS);
             }
         } catch (Exception e) {
             System.out.println("createCache fail cacheKey" + cacheKeyName);

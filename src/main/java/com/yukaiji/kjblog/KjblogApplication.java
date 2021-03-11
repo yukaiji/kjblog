@@ -17,7 +17,7 @@ public class KjblogApplication extends SpringApplication{
 
     public static void main(String[] args) throws InterruptedException {
         ApplicationContext applicationContext = SpringApplication.run(KjblogApplication.class, args);
-        test2(applicationContext);
+        test3(applicationContext);
     }
 
 
@@ -45,9 +45,27 @@ public class KjblogApplication extends SpringApplication{
     private static void test2(ApplicationContext applicationContext) throws InterruptedException {
         CacheTestService cacheTestService = (CacheTestService)applicationContext.getBean("cacheTestService");
         int i = 1;
-        while (true){
+        while (i < 100){
             long start = System.currentTimeMillis();
-            cacheTestService.obmsCacheThreadLocalTest("A", "B");
+            cacheTestService.obmsCacheLocalTest("A");
+            long end = System.currentTimeMillis();
+            long s = (end - start) / 1000;
+            if (i == 40) {
+                cacheTestService.obmsCacheLocalPutTest("A");
+            }
+            System.out.println("第" + i + "次 耗时: -> "  + s);
+            i++;
+            Thread.sleep(100);
+        }
+    }
+
+
+    private static void test3(ApplicationContext applicationContext) throws InterruptedException {
+        CacheTestService cacheTestService = (CacheTestService)applicationContext.getBean("cacheTestService");
+        int i = 1;
+        while (i < 100){
+            long start = System.currentTimeMillis();
+            cacheTestService.obmsCacheRedisTest("A");
             long end = System.currentTimeMillis();
             long s = (end - start) / 1000;
             System.out.println("第" + i + "次 耗时: -> "  + s);
