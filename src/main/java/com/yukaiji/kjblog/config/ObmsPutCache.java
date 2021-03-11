@@ -18,7 +18,7 @@ public @interface ObmsPutCache {
 
     boolean useThreadLocal() default false;
 
-    boolean useEhCache() default false;
+    boolean useLocalCache() default false;
 
     boolean useRedis() default false;
 

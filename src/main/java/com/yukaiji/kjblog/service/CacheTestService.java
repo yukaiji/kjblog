@@ -19,10 +19,10 @@ public class CacheTestService {
     @Resource
     private LocalCache localClient;
 
-    @ObmsCache(keyName = "#key", useThreadLocal = true)
-    public String obmsCacheTest(String key) throws InterruptedException {
-        Thread.sleep(10000);
-        return "new - yukaiji";
+    @ObmsCache(keyName = "#key + '_' + #key2", useThreadLocal = true)
+    public String obmsCacheThreadLocalTest(String key, String key2) throws InterruptedException {
+        Thread.sleep(3000);
+        return key;
     }
 
     public String localCacheTest(String key) throws InterruptedException {

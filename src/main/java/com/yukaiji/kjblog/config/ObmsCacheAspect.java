@@ -1,6 +1,7 @@
 package com.yukaiji.kjblog.config;
 
 import com.yukaiji.kjblog.common.RedisUtil;
+import com.yukaiji.kjblog.common.SpelUtil;
 import com.yukaiji.kjblog.common.ThreadLocalUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,7 +11,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -28,6 +28,9 @@ public class ObmsCacheAspect {
     @Resource
     private RedisUtil redisUtil;
 
+    @Resource
+    private LocalCache localCacheClient;
+
     /**
      * 此处的切点是注解的方式，也可以用包名的方式达到相同的效果
      */
@@ -43,11 +46,7 @@ public class ObmsCacheAspect {
             return joinPoint.proceed();
         }
         // 不传Key默认生成
-        String cacheKeyName = obmsCache.keyName();
-        System.out.println("cacheKeyName = " + cacheKeyName);
-        if (StringUtils.isEmpty(cacheKeyName)) {
-            cacheKeyName = genDefaultKey(joinPoint, obmsCache);
-        }
+        String cacheKeyName = genDefaultKey(joinPoint, obmsCache.keyName());
         // 逐级获取缓存
         Object object = this.getCache(cacheKeyName, obmsCache);
         // 创建缓存
@@ -56,6 +55,7 @@ public class ObmsCacheAspect {
         }
         return object;
     }
+
 
     /**
      * 获取缓存信息
@@ -74,11 +74,11 @@ public class ObmsCacheAspect {
                 }
             }
             // 二级本地缓存Ehcache
-            if (obmsCache.useEhCache()) {
-                //            Object result = ThreadLocalUtils.get(cacheKeyName);
-                //            if (result!=null) {
-                //                return result;
-                //            }
+            if (obmsCache.useLocalCache()) {
+                Object result = localCacheClient.get(cacheKeyName);
+                if (result != null) {
+                    return result;
+                }
             }
             // 三级分布式缓存Redis
             if (obmsCache.useRedis()) {
@@ -112,8 +112,9 @@ public class ObmsCacheAspect {
             if (obmsCache.useThreadLocal()) {
                 ThreadLocalUtils.set(cacheKeyName, object);
             }
-            if (obmsCache.useEhCache()) {
-                //            ThreadLocalUtils.set(cacheKeyName, object);
+            if (obmsCache.useLocalCache()) {
+                localCacheClient.put(cacheKeyName, object, expireTime);
+
             }
             if (obmsCache.useRedis()) {
                 redisUtil.setCacheObject(cacheKeyName, object, expireTime, TimeUnit.SECONDS);
@@ -131,27 +132,25 @@ public class ObmsCacheAspect {
      * @return true false
      */
     private boolean checkAnnotationParam(ObmsCache obmsCache) {
-        if (obmsCache.useEhCache() || obmsCache.useRedis() || obmsCache.useThreadLocal()) {
+        if (obmsCache.useRedis() || obmsCache.useLocalCache() || obmsCache.useThreadLocal()) {
             return true;
         }
         return false;
     }
 
+
     /**
-     * 根据方法参数生成默认Key
+     * 根据方法参数生成Key
      *
      * @param joinPoint 切点
-     * @param obmsCache 注解
      * @return 默认生成的Key
      */
-    private String genDefaultKey(ProceedingJoinPoint joinPoint, ObmsCache obmsCache) {
+    private String genDefaultKey(ProceedingJoinPoint joinPoint, String key) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method targetMethod = methodSignature.getMethod();
-
-        String defaultKey = "1111";
-        System.out.println("默认生成的key:" + defaultKey);
-        return defaultKey;
+        // 根据方法名及参数生成KEY
+        return SpelUtil.parse(joinPoint.getTarget(), key, targetMethod, joinPoint.getArgs());
     }
 
     /**

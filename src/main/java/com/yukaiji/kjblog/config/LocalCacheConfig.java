@@ -20,7 +20,7 @@ public class LocalCacheConfig {
     @Resource
     private CacheProperties cacheProperties;
 
-    @Bean("localClient")
+    @Bean("localCacheClient")
     public LocalCache buildCache() {
         LocalCache localCache = LocalCache.getInstance();
         localCache.setMaxMemory(cacheProperties.getMaxMemory());

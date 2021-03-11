@@ -17,17 +17,21 @@ public class KjblogApplication extends SpringApplication{
 
     public static void main(String[] args) throws InterruptedException {
         ApplicationContext applicationContext = SpringApplication.run(KjblogApplication.class, args);
+        test2(applicationContext);
+    }
 
+
+    private static void test1(ApplicationContext applicationContext) throws InterruptedException {
         CacheTestService cacheTestService = (CacheTestService)applicationContext.getBean("cacheTestService");
 
         int i = 1;
         while (true){
             long start = System.currentTimeMillis();
-            cacheTestService.testCaffeineCache("A");
+            cacheTestService.caffeineCacheTest("A");
             long end = System.currentTimeMillis();
 
             long start2 = System.currentTimeMillis();
-            cacheTestService.testCaffeineCache2("A");
+            cacheTestService.caffeineCacheTest2("A");
             long end2 = System.currentTimeMillis();
 
             long s = (end - start) / 1000;
@@ -36,27 +40,20 @@ public class KjblogApplication extends SpringApplication{
             i++;
             Thread.sleep(1000);
         }
+    }
 
-//        for (int i = 0; i < 5000; i++) {
-//            int finalI = i;
-//            Thread thread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        long start = System.currentTimeMillis();
-//                        cacheTestService.testLocalCache(String.valueOf(finalI));
-//                        long end = System.currentTimeMillis();
-//                        long s = (end - start) / 1000;
-//
-//
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//            thread.start();
-//        }
-
+    private static void test2(ApplicationContext applicationContext) throws InterruptedException {
+        CacheTestService cacheTestService = (CacheTestService)applicationContext.getBean("cacheTestService");
+        int i = 1;
+        while (true){
+            long start = System.currentTimeMillis();
+            cacheTestService.obmsCacheThreadLocalTest("A", "B");
+            long end = System.currentTimeMillis();
+            long s = (end - start) / 1000;
+            System.out.println("第" + i + "次 耗时: -> "  + s);
+            i++;
+            Thread.sleep(100);
+        }
     }
 
 }
